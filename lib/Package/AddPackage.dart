@@ -48,7 +48,7 @@ Future upload(File imageFile) async{
 
   var request = new http.MultipartRequest("POST", uri);
 
-  var multipartFile = new http.MultipartFile("image", stream, length, filename: basename(imageFile.path)); 
+  var multipartFile = new http.MultipartFile("_image", stream, length, filename: basename(imageFile.path)); 
   
   request.fields['_packagename']= pNamecontrol.text;
   request.fields['_detail']= detailcontrol.text;
@@ -67,68 +67,6 @@ Future upload(File imageFile) async{
     });
 }
 
-
-
-//File _image;
- 
-
-//  upload(File imageFile) async{
-//   var steam=http.ByteStream(DelegatingStream.typed(imageFile.openRead()));
-//   var length=await imageFile.length();
-//   var uri=Uri.parse("http://10.0.2.2:81/api_travelagentfyp/FetchPackageDetails.php");
-//   var request=http.MultipartRequest('POST',uri);
-//   request.fields['_packagename']= pNamecontrol.text;
-//   request.fields['_detail']= detailcontrol.text;
-//   request.fields['_price']= pricecontrol.text;
-//   var multipartFile=http.MultipartFile('image',steam, length ,filename: basename(imageFile.path));
-//   request.files.add(multipartFile);
-//   var response= await request.send();
-//   if(response.statusCode == 200){
-//     print("Data Uploaded");
-//   }
-//   else
-//   {
-//     print("Failed");
-//   }
-  
-//   response.stream.transform(utf8.decoder).listen((value) {
-//       print(value);
-//     });
-// }
-
-// final String phpEndPoint = 'http://10.0.2.2:81/api_travelagentfyp//InsertTouristPhoto.php';
-
-// File _image;
-// getImageGallery() async {
-//   var imageFile = await ImagePicker.pickImage(source: ImageSource.gallery);
-
-//   setState(() {
-//     _image=imageFile;
-//   });
-//  }
-
-//  void _choose() async {
-//    //file = await ImagePicker.pickImage(source: ImageSource.camera);
-//  _image = await ImagePicker.pickImage(source: ImageSource.gallery);
-//  }
-
-//  void _upload() {
-//    if (_image == null) return;
-//    String base64Image = base64Encode(_image.readAsBytesSync());
-//    String fileName = _image.path.split("/").last;
-
-//    http.post(phpEndPoint, body: {
-//      "image": base64Image,
-//      "name": fileName,
-//       "_packagename": pNamecontrol.text,
-//       "_detail": detailcontrol.text,
-//       "_price": pricecontrol.text,
-//    }).then((res) {
-//      print(res.statusCode);
-//    }).catchError((err) {
-//      print(err);
-//    });
-//  }
 
 
 Widget _buildPackageName () {
@@ -259,8 +197,6 @@ Widget _logo () {
             SizedBox(height: 20.0),
             _buildPrice(),
             SizedBox(height: 20.0),
-            _showImage(),
-            SizedBox(height: 20.0),
               Container(
          height: 40.0,
           color: Colors.transparent,
@@ -287,6 +223,8 @@ Widget _logo () {
                  ),
             ),
             SizedBox(height: 20),
+            _showImage(),
+            SizedBox(height: 20.0),
              Container(
          height: 40.0,
           color: Colors.transparent,
