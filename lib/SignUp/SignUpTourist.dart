@@ -169,7 +169,7 @@ class _TouristSignUpState extends State<TouristSignUp> {
                                   borderRadius: BorderRadius.circular(20.0)),
                               child: InkWell(
                                 onTap: () {
-                                  insertTouristLoginDetail();
+                                  //insertTouristLoginDetail();
                                   if(!_formkey.currentState.validate()){
                                     return null;
                                   }

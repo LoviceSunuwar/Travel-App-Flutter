@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:travelagent_fyp/HomeScreen/Welcome.dart';
+import 'package:travelagent_fyp/HomeScreen/WelcomeAgency.dart';
+import 'package:travelagent_fyp/HomeScreen/WelcomeGuide.dart';
 import 'package:travelagent_fyp/Package/AddDMC.dart';
 import 'package:travelagent_fyp/Package/AddPackage.dart';
 import 'package:travelagent_fyp/SignUp/ProfileSignUpAgency.dart';
@@ -22,6 +25,9 @@ class MyApp extends StatelessWidget {
       '/SignUpProfileAgency': (BuildContext context) => new ProfileSignUpAgency(),
       '/AddPackage': (BuildContext context) => new AddPackage(),
       '/AddDMC': (BuildContext context) => new AddDMC(),
+      '/Welcome': (BuildContext context) => new WelcomePage(),
+      '/WelcomeGuide': (BuildContext context) => new WelcomePageGuide(),
+      '/WelcomeAgency': (BuildContext context) => new WelcomePageAgency(),
       },
 
     );

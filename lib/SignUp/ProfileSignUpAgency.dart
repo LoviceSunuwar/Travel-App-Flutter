@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:convert';
 import 'dart:io';
+import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart';
 import 'package:async/async.dart';
 import 'package:path_provider/path_provider.dart';
@@ -35,86 +36,64 @@ class _ProfileSignUpAgencyState extends State<ProfileSignUpAgency> {
     TextEditingController panNocontrol = new TextEditingController();
 
 
-void insertTouristProfile(){
+// void insertTouristProfile(){
  
-    var url="http://10.0.2.2:81/api_yourtravelagent/InsertTouristProfile.php";
-  http.post(url, body:
-  {
-    "_agencyname": agencyNamecontrol.text,
-    "_address": addresscontrol.text,
-    "_panNo": panNocontrol.text,
-    "_Contact": contactcontrol.text,
-    "_About": aboutcontrol.text,
+//     var url="http://10.0.2.2:81/api_yourtravelagent/InsertTouristProfile.php";
+//   http.post(url, body:
+//   {
+//     "_agencyname": agencyNamecontrol.text,
+//     "_address": addresscontrol.text,
+//     "_panNo": panNocontrol.text,
+//     "_Contact": contactcontrol.text,
+//     "_About": aboutcontrol.text,
+    
 
-  }
+//   }
   
-  );
+//   );
 
+// }
+
+
+File _image;
+Future getImageGallery() async{
+  var imageFile = await ImagePicker.pickImage(source: ImageSource.gallery);
+
+
+  setState(() {
+      _image = imageFile;
+    });
 }
 
-// File _image;
-// TextEditingController cTitle = new TextEditingController();
+Future upload(File imageFile) async{
+  var stream= new http.ByteStream(DelegatingStream.typed(imageFile.openRead()));
+  var length= await imageFile.length();
+  var uri = Uri.parse("http://10.0.2.2:81/api_travelagentfyp/InsertTouristProfile.php");
 
-// Future getImageGallery() async{
-//   var imageFile = await ImagePicker.pickImage(source: ImageSource.gallery);
+  var request = new http.MultipartRequest("POST", uri);
 
-//   final tempDir =await getTemporaryDirectory();
-//   final path = tempDir.path;
-
-//   int rand= new Math.Random().nextInt(100000);
-
-//   Img.Image image= Img.decodeImage(imageFile.readAsBytesSync());
-//   //Img.Image smallerImg = Img.copyResize(image, 500);
-
-//   var compressImg= new File("$path/image_$rand.jpg");
-//   //..writeAsBytesSync(Img.encodeJpg(smallerImg, quality: 85));
-
-
-//   setState(() {
-//       _image = compressImg;
-//     });
-// }
-
-	
-// $Image = '';
-// $ImageName = '';
-
-// if (isset($_POST['_image'])) {
-// 	$Image = $_POST['_image'];
-// }
-	
-// if (isset($_POST['_imageName'])) {
-// 	$ImageName = $_POST['_imageName'];
-// }
-
-
-//   $realImage = base64_decode($Image);
+  var multipartFile = new http.MultipartFile("_image", stream, length, filename: basename(imageFile.path)); 
   
-//   file_put_contents($Image,$ImageName);
-// //   echo "OK";
-// Future upload(File imageFile) async{
-//   var stream= new http.ByteStream(DelegatingStream.typed(imageFile.openRead()));
-//   var length= await imageFile.length();
-//   var uri = Uri.parse("http://10.0.2.2/api_yourtravelagent/InsertTouristPhoto.php");
+    
+  request.fields['_agencyname']= agencyNamecontrol.text;
+  
+  request.fields['_address']= addresscontrol.text;
+  request.fields['_panNo']= panNocontrol.text;
+  request.fields['_Contact']= contactcontrol.text;
+  request.fields['_About']= aboutcontrol.text;
+  request.files.add(multipartFile); 
 
-//   var request = new http.MultipartRequest("POST", uri);
+  var response = await request.send();
 
-//   var multipartFile = new http.MultipartFile("image", stream, length, filename: basename(imageFile.path)); 
-//   request.fields['title'] = cTitle.text;
-//   request.files.add(multipartFile); 
-
-//   var response = await request.send();
-
-//   if(response.statusCode==200){
-//     print("Image Uploaded");
-//   }else{
-//     print("Upload Failed");
-//   }
-//   response.stream.transform(utf8.decoder).listen((value) {
-//       print(value);
-//     });
-// }
-
+  if(response.statusCode==200){
+    print("Image Uploaded");
+  }else{
+    print("Upload Failed");
+  }
+  response.stream.transform(utf8.decoder).listen((value) {
+      print(value);
+    });
+}
 
 
 Widget _logo () {
@@ -259,6 +238,14 @@ return TextFormField(
     );
 }
 
+Widget _showImage() {
+  return Container( 
+    child: _image==null
+    ? new Text("No Image Selected!")
+    : new Image.file(_image),
+  );
+}
+
 
  
 
@@ -291,7 +278,6 @@ return TextFormField(
           SizedBox(height: 10,),
           _buildAbout(),
           SizedBox(height: 10,),
-          //_buildShowImage(),
           SizedBox(height: 10,),
           Container(
                height: 40.0,
@@ -306,7 +292,7 @@ return TextFormField(
                         borderRadius: BorderRadius.circular(20.0)),
                         child: InkWell(
                         onTap: () {
-                         //getImageGallery();
+                          getImageGallery();
                         },
                                 child:
                          Center(
@@ -332,7 +318,16 @@ return TextFormField(
                         borderRadius: BorderRadius.circular(20.0)),
                         child: InkWell(
                         onTap: () {
-                          //upload(_image);
+
+                          
+                                  if(!_formkey.currentState.validate()){
+                                    return null;
+                                  }
+
+                                  _formkey.currentState.save();
+                                  upload(_image);
+                                  Navigator.of(context).pushNamed('/WelcomeAgency');
+                                  
                         },
                                 child:
                          Center(

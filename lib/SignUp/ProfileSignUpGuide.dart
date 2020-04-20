@@ -1,5 +1,14 @@
+
+
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:http/http.dart' as http;
+import 'package:async/async.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:path/path.dart';
 import 'package:travelagent_fyp/Login/Login.dart';
 import 'package:http/http.dart' as http;
 
@@ -34,25 +43,69 @@ class _ProfileSignUpGuideState extends State<ProfileSignUpGuide> {
     TextEditingController licnocontrol = new TextEditingController();
     TextEditingController languagecontrol = new TextEditingController();
 
-void insertTouristProfile(){
+// void insertTouristProfile(){
  
-    var url="http://10.0.2.2/api_yourtravelagent/InsertTouristProfile.php";
-  http.post(url, body:
-  {
-    "_FirstName": fnamecontrol.text,
-    "_LastName": lnamecontrol.text,
-    "_Age": agecontrol.text,
-    "_TAddress": taddresscontrol.text,
-    "_PAddress": paddresscontrol.text,
-    "_Contact": contactcontrol.text,
-    "_About": aboutcontrol.text,
-    "_licno": licnocontrol.text,
-    "_language": languagecontrol.text,
+//     var url="http://10.0.2.2/api_yourtravelagent/InsertTouristProfile.php";
+//   http.post(url, body:
+//   {
+//     "_FirstName": fnamecontrol.text,
+//     "_LastName": lnamecontrol.text,
+//     "_Age": agecontrol.text,
+//     "_TAddress": taddresscontrol.text,
+//     "_PAddress": paddresscontrol.text,
+//     "_Contact": contactcontrol.text,
+//     "_About": aboutcontrol.text,
+//     "_licno": licnocontrol.text,
+//     "_language": languagecontrol.text,
 
-  }
+//   }
   
-  );
+//   );
 
+// }
+
+
+File _image;
+Future getImageGallery() async{
+  var imageFile = await ImagePicker.pickImage(source: ImageSource.gallery);
+
+
+  setState(() {
+      _image = imageFile;
+    });
+}
+
+Future upload(File imageFile) async{
+  var stream= new http.ByteStream(DelegatingStream.typed(imageFile.openRead()));
+  var length= await imageFile.length();
+  var uri = Uri.parse("http://10.0.2.2:81/api_travelagentfyp/InsertTouristProfile.php");
+
+  var request = new http.MultipartRequest("POST", uri);
+
+  var multipartFile = new http.MultipartFile("_image", stream, length, filename: basename(imageFile.path)); 
+  
+    
+  request.fields['_FirstName']= lnamecontrol.text;
+  request.fields['_LastName']= agecontrol.text;
+  request.fields['_Age']= taddresscontrol.text;
+  request.fields['_TAddress']= fnamecontrol.text;
+  request.fields['_PAddress']= paddresscontrol.text;
+  request.fields['_Contact']= contactcontrol.text;
+  request.fields['_About']= aboutcontrol.text;
+  request.fields['_licno']= licnocontrol.text;
+  request.fields['_language']= languagecontrol.text;
+  request.files.add(multipartFile); 
+
+  var response = await request.send();
+
+  if(response.statusCode==200){
+    print("Image Uploaded");
+  }else{
+    print("Upload Failed");
+  }
+  response.stream.transform(utf8.decoder).listen((value) {
+      print(value);
+    });
 }
 
 
@@ -286,6 +339,13 @@ return TextFormField(
     );
 }
 
+Widget _showImage() {
+  return Container( 
+    child: _image==null
+    ? new Text("No Image Selected!")
+    : new Image.file(_image),
+  );
+}
 
  
 
@@ -326,7 +386,7 @@ return TextFormField(
           SizedBox(height: 10,),
           _buildAbout(),
           SizedBox(height: 10,),
-          //_buildShowImage(),
+          _showImage(),
           SizedBox(height: 10,),
           Container(
                height: 40.0,
@@ -341,9 +401,7 @@ return TextFormField(
                         borderRadius: BorderRadius.circular(20.0)),
                         child: InkWell(
                         onTap: () {
-                         // chooseImage();
-                         // getImageGallery();
-                         //getImage();
+                          getImageGallery();
                         },
                                 child:
                          Center(
@@ -369,6 +427,13 @@ return TextFormField(
                         borderRadius: BorderRadius.circular(20.0)),
                         child: InkWell(
                         onTap: () {
+                                  upload(_image);
+                                  if(!_formkey.currentState.validate()){
+                                    return null;
+                                  }
+
+                                  _formkey.currentState.save();
+                                  Navigator.of(context).pushNamed('/WelcomeGuide');
                         },
                                 child:
                          Center(
