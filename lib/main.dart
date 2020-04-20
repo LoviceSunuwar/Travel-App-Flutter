@@ -4,9 +4,6 @@ import 'package:travelagent_fyp/HomeScreen/WelcomeAgency.dart';
 import 'package:travelagent_fyp/HomeScreen/WelcomeGuide.dart';
 import 'package:travelagent_fyp/Package/AddDMC.dart';
 import 'package:travelagent_fyp/Package/AddPackage.dart';
-import 'package:travelagent_fyp/SignUp/ProfileSignUpAgency.dart';
-import 'package:travelagent_fyp/SignUp/ProfileSignUpGuide.dart';
-import 'package:travelagent_fyp/SignUp/ProfileSignUpTourist.dart';
 
 import 'Login/Login.dart';
 
@@ -20,9 +17,6 @@ class MyApp extends StatelessWidget {
       routes: <String, WidgetBuilder>{
         
       '/LogIn': (BuildContext context) => new Login(),
-      '/SignUpTouristProfile': (BuildContext context) => new ProfileSignUpTourist(),
-      '/SignUpProfileGuide': (BuildContext context) => new ProfileSignUpGuide(),
-      '/SignUpProfileAgency': (BuildContext context) => new ProfileSignUpAgency(),
       '/AddPackage': (BuildContext context) => new AddPackage(),
       '/AddDMC': (BuildContext context) => new AddDMC(),
       '/Welcome': (BuildContext context) => new WelcomePage(),
