@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "604598182306",
+    "firebase_url": "https://travelagentfyp.firebaseio.com",
+    "project_id": "travelagentfyp",
+    "storage_bucket": "travelagentfyp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:604598182306:android:9b6f74012497297c8392fb",
+        "android_client_info": {
+          "package_name": "com.example.travelagent_fyp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "604598182306-9hvcduoesitnfm9jiolh8prg7000526e.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA_QB45tJ3XIBMUarE5hKUaCg_URZoUxz8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "604598182306-9hvcduoesitnfm9jiolh8prg7000526e.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
