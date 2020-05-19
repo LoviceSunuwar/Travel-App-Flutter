@@ -1,6 +1,5 @@
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:travelagent_fyp/Guide/GuideView.dart';
 import 'package:travelagent_fyp/HomeScreen/HomeScreenAgency.dart';
 import 'package:travelagent_fyp/Package/AddDMC.dart';
