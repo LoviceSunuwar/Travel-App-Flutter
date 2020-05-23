@@ -2,22 +2,30 @@ import 'package:carousel_pro/carousel_pro.dart';
 import 'package:flutter/material.dart';
 import 'package:travelagent_fyp/Guide/GuideView.dart';
 import 'package:travelagent_fyp/HomeScreen/HomeScreenAgency.dart';
+import 'package:travelagent_fyp/Package.dart';
 import 'package:travelagent_fyp/Package/AddDMC.dart';
+import 'package:travelagent_fyp/Package/ShowPackage.dart';
 import 'package:travelagent_fyp/Profile/PofileTourist.dart';
 import 'dart:convert';
-import 'package:http/http.dart' show get;
+import 'package:http/http.dart' as http;
+import 'package:travelagent_fyp/Package.dart';
+
 
 
 
 
 
 class HomeScreen extends StatefulWidget {
+  final String value;
+  final Package package;
+  HomeScreen({Key key, this.value, this.package }) : super(key: key);
   @override
   _HomeScreenState createState() => _HomeScreenState();
 
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+
   @override
 
 
@@ -42,6 +50,7 @@ Widget image_carousel = new Container(
 
 
 Widget build(BuildContext context) {
+  
     return Scaffold(
       appBar: new AppBar(
         elevation: 0.5,
@@ -126,15 +135,93 @@ Widget build(BuildContext context) {
       ),
 
       body: new ListView(
+        
         children: <Widget>[
           // Image carousel beigns here
           image_carousel,
-          // Adding padding widget
-         
+          // Container(
+          //   child: ShowPackage(),
+          // )
+          FutureBuilder(
+            future: _getData(),
+        builder: (BuildContext context, AsyncSnapshot<List<Package>> snapshot) {
+          if (snapshot.hasData) {
+            Package package = snapshot.data[0];
+            return Center(
+              child: ListTile(title: new Card(
+          elevation: 5.0,
+          child: new Container(
+            decoration: BoxDecoration(border: Border.all(color: Colors.orange)),
+            padding: EdgeInsets.all(20.0),
+            margin: EdgeInsets.all(20.0),
+            child: Column(
+              children: <Widget>[
+                Padding(
+                  child: Image.network(package.packageImage),
+                  padding: EdgeInsets.only(bottom: 8.0),
+                ),
+                Row(children: <Widget>[
+                  Padding(
+                      child: Text(
+                        package.packageName,
+                        style: new TextStyle(fontWeight: FontWeight.bold),
+                        textAlign: TextAlign.right,
+                      ),
+                      padding: EdgeInsets.all(1.0)),
+                  Text(" | "),
+                  Padding(
+                      child: Text(
+                        '${package.price}',
+                        style: new TextStyle(fontStyle: FontStyle.italic),
+                        textAlign: TextAlign.right,
+                      ),
+                      padding: EdgeInsets.all(1.0)),
+                ]),
+              ],
+            ),
+          ),
+        ),
+        onTap: () {
+          //We start by creating a Page Route.
+          //A MaterialPageRoute is a modal route that replaces the entire
+          //screen with a platform-adaptive transition.
+          // var route = new MaterialPageRoute(
+          //   builder: (BuildContext context) =>
+          //   new SecondScreen(value: spacecraft),
+          // );
+          //A Navigator is a widget that manages a set of child widgets with
+          //stack discipline.It allows us navigate pages.
+         // Navigator.of(context).push(route);
+        }));
+          }
+          print(snapshot.error);
+          print(snapshot.hasError);
+         return Center(child: Text(snapshot.error.toString()));
+
+          },
+      ),
+          
         ],
       ),    
     );
+}
+ Future<List<Package>> _getData() async {
+    var url =
+        'http://10.0.2.2:81/api_travelagentfyp/packageindex.php';
+    var response = await http.get(url);
+    print('Response status: ${response.statusCode}');
+    List<Package> package = _mapJsonToPackage(response.body);
+    print(package[0]);
+    return package;
+    
   }
+
+  List<Package> _mapJsonToPackage(String response) {
+    return (jsonDecode(response) as List).map((packageAsString) {
+      return Package.fromJson(packageAsString);
+    }).toList();
+  }
+
 
 
 }

@@ -3,7 +3,10 @@ import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:travelagent_fyp/Login/Login.dart';
 
+
 class AddDMC extends StatefulWidget {
+  final String value;
+  AddDMC({Key key, this.value}): super(key: key);
   @override
   _AddDMCState createState() => _AddDMCState();
 }
@@ -22,13 +25,13 @@ class _AddDMCState extends State<AddDMC> {
 
 
   void insertDMCDetail(){
-
     var url="http://10.0.2.2:81/api_travelagentfyp/FetchDMCDetails.php";
     http.post(url, body: 
     {
       "_DMCDetail": dmcdetailcontrol.text,
       "_MinPrice": minpricecontrol.text,
       "_MaxPrice": maxpricecontrol.text,
+      "_Email": widget.value,
 
     }
     );
@@ -40,7 +43,7 @@ Widget _buildDMCDetail () {
 return TextFormField(
           controller: dmcdetailcontrol,
           decoration: InputDecoration(
-          hintText: 'Your requirement',
+          hintText: '${widget.value}',
           contentPadding: EdgeInsets.all(15.0),
           border: InputBorder.none,
           filled: true,

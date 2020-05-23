@@ -6,16 +6,23 @@ import 'package:travelagent_fyp/Package/AddDMC.dart';
 import 'package:travelagent_fyp/Profile/PofileTourist.dart';
 import 'package:travelagent_fyp/Profile/ProfileGuide.dart';
 
+
 class HomeScreenGuide extends StatefulWidget {
-  @override
+  
+  final String value;
+ HomeScreenGuide({Key key, this.value }) : super(key: key);
+
   _HomeScreenGuideState createState() => _HomeScreenGuideState();
 
 }
 
 class _HomeScreenGuideState extends State<HomeScreenGuide> {
+  
   @override
 
 Widget build(BuildContext context) {
+
+var useremail = widget.value;
 
 Widget image_carousel = new Container(
   height: 150.0,
@@ -78,7 +85,7 @@ Widget image_carousel = new Container(
             
             onTap: () {Navigator.push(context, new MaterialPageRoute(
                         builder: (context) =>
-                          new AddDMC())
+                          new AddDMC(value: useremail,))
                         );},
             child: ListTile(
               title: Text('Create DMC'),

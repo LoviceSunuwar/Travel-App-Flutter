@@ -1,11 +1,18 @@
+
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:http/http.dart' as http;
 import 'package:travelagent_fyp/HomeScreen/HomeScreen.dart';
 import 'dart:convert';
 import 'package:travelagent_fyp/HomeScreen/HomeScreenAgency.dart';
+import 'package:travelagent_fyp/HomeScreen/HomeScreenGuide.dart';
 import 'package:travelagent_fyp/HomeScreen/HomeScreenSurf.dart';
+import 'package:travelagent_fyp/Package/AddPackage.dart';
 import 'package:travelagent_fyp/SignUp/SignUpTourist.dart';
+
+import '../Profile.dart';
+
+
 
 class Login extends StatefulWidget {
   @override
@@ -14,23 +21,27 @@ class Login extends StatefulWidget {
 
 class _LoginState extends State<Login> {
   
-TextEditingController emailcontrol= new TextEditingController();
+var emailcontrol= new TextEditingController();
 TextEditingController pass= new TextEditingController();
 
 String msg='';
 
 Future<List> _login() async {
-  final response = await http.post("http://10.0.2.2:81/api_travelagentfyp/api_login.php",
+  var response = await http.post("http://10.0.2.2:81/api_travelagentfyp/api_login.php",
   body: {
     "_Email": emailcontrol.text,
     "_Password": pass.text,
   });
 
-//print(response.body);
-
+  print(response.body);
   var datauser = json.decode(response.body);
+  Profile profile = Profile.fromJson(datauser[0]);
+  print(profile.email);
+  print(profile.username);
   print(datauser);
   print(datauser.length);
+
+  
   if(datauser.length==1){
 
   if(datauser[0]['LoginLevel']=='Agency'){
@@ -43,7 +54,7 @@ Future<List> _login() async {
         if(datauser[0]['LoginLevel']=='Guide'){
          Navigator.push(context, new MaterialPageRoute(
                         builder: (context) =>
-                          new HomeScreen())
+                          new HomeScreenGuide())
                         );}
   else 
           if(datauser[0]['LoginLevel']=='Tourist'){
@@ -54,15 +65,36 @@ Future<List> _login() async {
                        );}
           //Navigator.pushReplacementNamed(context, '/HomeScreen');}
       
-   }
+  }
   else{
     
     print("Sorry the infomration does not match.");
   }
-  
-  return datauser;
-  
+  return datauser;  
 }
+
+// Future fetchUser() async {
+//   final response =
+//       await http.get("http://10.0.2.2:81/api_travelagentfyp/api_login.php");
+
+//   if (response.statusCode == 200) {
+//     // If the server did return a 200 OK response,
+//     // then parse the JSON.
+//     print(User);
+//     return User.fromJson(json.decode(response.body));
+//   } else {
+//     // If the server did not return a 200 OK response,
+//     // then throw an exception.
+//     throw Exception('Failed to load User');
+//   }
+// }
+
+// void saveEmail() {
+//   String useremail = emailcontrol.text;
+//   saveEmailPref(useremail).then((bool committed) 
+//   {});
+// }
+
 
  @override 
      Widget build(BuildContext context) {
@@ -170,6 +202,7 @@ Future<List> _login() async {
                             
                             onPressed: () {
                               _login();
+                              //saveEmail();
                             },
                             child: Center(
                               child: Text('Log In',

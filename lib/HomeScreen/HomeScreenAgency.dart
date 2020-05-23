@@ -3,9 +3,21 @@ import 'package:flutter/material.dart';
 import 'package:travelagent_fyp/Package/AddPackage.dart';
 import 'package:travelagent_fyp/Profile/ProfileAgency.dart';
 
-class AgencyHomeScreen extends StatelessWidget {
+
+class AgencyHomeScreen extends StatefulWidget {
   
+  final String value;
+  AgencyHomeScreen({Key key, this.value }) : super(key: key);
+  @override
+  _AgencyHomeScreenState createState() => _AgencyHomeScreenState();
+}
+
+class _AgencyHomeScreenState extends State<AgencyHomeScreen> {
+ 
+
 Widget build(BuildContext context) {
+
+var useremail = widget.value;
 
 Widget image_carousel = new Container(
   height: 150.0,
@@ -38,6 +50,7 @@ Widget image_carousel = new Container(
         actions: <Widget>[
           new IconButton(icon: Icon(Icons.search, color: Colors.grey,), onPressed: () {}),
           new IconButton(icon: Icon(Icons.person_pin, color: Colors.grey,), 
+          
           onPressed: () {ProfileViewAgency();})
           
         ],
@@ -64,7 +77,7 @@ Widget image_carousel = new Container(
             InkWell( //Using this inkwell because it makes any part of the page into a button
             onTap: () {  Navigator.push(context, new MaterialPageRoute(
                         builder: (context) =>
-                          new AddPackage())
+                          new AddPackage(value: useremail))
                        );},
             child: ListTile(
               title: Text('Create Package'),
@@ -105,11 +118,11 @@ Widget image_carousel = new Container(
           image_carousel,
           // Adding padding widget
           new Padding(padding: const EdgeInsets.all(8.0),
+          child: new Text("${widget.value}"),
+          
           )
         ],
       ),
     );
-  }
-
-
 }
+  }

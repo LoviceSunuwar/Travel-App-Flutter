@@ -13,18 +13,26 @@ import 'dart:math' as Math;
 import 'package:image/image.dart' as Img;
 
 class AddPackage extends StatefulWidget {
+  String value;
+  AddPackage({Key key, this.value});
   @override
   _AddPackageState createState() => _AddPackageState();
 }
 
 class _AddPackageState extends State<AddPackage> {
   
+
+  // void initState() {
+  //   getEmailPref().then((updateEmail));
+  //   super.initState();
+  // }
+
+  
   String _packagename;
   String _detail;
   String _price;
   
   final _formkey = GlobalKey<FormState>();
-
     TextEditingController pNamecontrol = new TextEditingController();
     TextEditingController detailcontrol = new TextEditingController();
     TextEditingController pricecontrol = new TextEditingController();
@@ -32,6 +40,7 @@ class _AddPackageState extends State<AddPackage> {
 
 
 File _image;
+
 Future getImageGallery() async{
   var imageFile = await ImagePicker.pickImage(source: ImageSource.gallery);
 
@@ -50,10 +59,12 @@ Future upload(File imageFile) async{
 
   var multipartFile = new http.MultipartFile("_image", stream, length, filename: basename(imageFile.path)); 
   
+  request.fields['_Email'] = widget.value;
   request.fields['_packagename']= pNamecontrol.text;
   request.fields['_detail']= detailcontrol.text;
   request.fields['_price']= pricecontrol.text;
   request.files.add(multipartFile); 
+  
 
   var response = await request.send();
 
