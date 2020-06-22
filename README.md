@@ -1,16 +1,11 @@
 # travelagent_fyp
 
-A new Flutter project.
+Travel websites are becoming increasingly popular. People tend to use travel
+planning online and visit different websites during the cycles of organization and boking.
+There are two forms of tourism strategies. One is DMC and the other is bundles. It means
+that the tourist provides information and demands according to user needs with the sum
+of budget user. Packages are the one that gave instructions from the organization with its
+own guide and how much it takes to go. The three of them benefit from both directions in
+this process, but tourist guide does not have the means to engage in this process on their
+own.
 
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
